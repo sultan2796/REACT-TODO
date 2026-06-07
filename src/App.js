@@ -1,12 +1,13 @@
-import { useState } from "react";
-import "./App.css";
+
+import { useState } from 'react';
+import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [filter, setFilter] = useState("all");
-  
-    const addTodo = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [filter, setFilter] = useState('all'); 
+
+  const addTodo = () => {
     if (inputValue.trim() !== '') {
       setTodos([...todos, { 
         id: Date.now(), 
@@ -17,7 +18,7 @@ function App() {
     }
   };
 
-    const handleKeyPress = (e) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       addTodo();
     }
@@ -26,23 +27,24 @@ function App() {
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
-  
-  const toggleComplete = (id) =>{
+
+  const toggleComplete = (id) => {
     setTodos(todos.map(todo =>
-      todo.id === i ? {...todo,completed: !todo.completed} : todo
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ));
   };
 
+  
   const getFilteredTodos = () => {
-    if (filter === "active"){
+    if (filter === 'active') {
       return todos.filter(todo => !todo.completed);
-    }else if(filter === "completed"){
+    } else if (filter === 'completed') {
       return todos.filter(todo => todo.completed);
     }
     return todos;
   };
 
-    const filteredTodos = getFilteredTodos();
+  const filteredTodos = getFilteredTodos();
 
   return (
     <div className="App">
@@ -59,7 +61,7 @@ function App() {
         <button onClick={addTodo}>Əlavə Et</button>
       </div>
 
-    
+      
       <div className="filters">
         <button onClick={() => setFilter('all')}>Hamısı</button>
         <button onClick={() => setFilter('active')}>Aktiv</button>
@@ -84,6 +86,7 @@ function App() {
         )}
       </div>
 
+      
       <div className="stats">
         <p>Cəmi: {todos.length} | 
            Aktiv: {todos.filter(t => !t.completed).length} | 
@@ -92,7 +95,6 @@ function App() {
       </div>
     </div>
   );
-
 }
 
 export default App;
