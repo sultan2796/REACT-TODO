@@ -1,26 +1,25 @@
 
 import { useState } from 'react';
 import './App.css';
+import TodoInput from './components/TodoInput';
+import FilterButtons from './components/FilterButtons';
+import TodoList from './components/TodoList';
+import TodoStats from './components/TodoStats';
 
 function App() {
+  
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const [filter, setFilter] = useState('all'); 
+  const [filter, setFilter] = useState('all');
 
   const addTodo = () => {
     if (inputValue.trim() !== '') {
-      setTodos([...todos, { 
-        id: Date.now(), 
-        text: inputValue, 
-        completed: false 
+      setTodos([...todos, {
+        id: Date.now(),
+        text: inputValue,
+        completed: false
       }]);
       setInputValue('');
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      addTodo();
     }
   };
 
@@ -36,11 +35,8 @@ function App() {
 
   
   const getFilteredTodos = () => {
-    if (filter === 'active') {
-      return todos.filter(todo => !todo.completed);
-    } else if (filter === 'completed') {
-      return todos.filter(todo => todo.completed);
-    }
+    if (filter === 'active') return todos.filter(todo => !todo.completed);
+    if (filter === 'completed') return todos.filter(todo => todo.completed);
     return todos;
   };
 
@@ -49,50 +45,23 @@ function App() {
   return (
     <div className="App">
       <h1>Todo App</h1>
-      
-      <div className="todo-input">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Yeni todo əlavə edin..."
-        />
-        <button onClick={addTodo}>Əlavə Et</button>
-      </div>
 
-      
-      <div className="filters">
-        <button onClick={() => setFilter('all')}>Hamısı</button>
-        <button onClick={() => setFilter('active')}>Aktiv</button>
-        <button onClick={() => setFilter('completed')}>Tamamlanan</button>
-      </div>
 
-      <div className="todo-list">
-        {filteredTodos.length === 0 ? (
-          <p>Heç bir todo yoxdur.</p>
-        ) : (
-          filteredTodos.map(todo => (
-            <div key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => toggleComplete(todo.id)}
-              />
-              <span>{todo.text}</span>
-              <button onClick={() => deleteTodo(todo.id)}>Sil</button>
-            </div>
-          ))
-        )}
-      </div>
+      <TodoInput
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        addTodo={addTodo}
+      />
 
-      
-      <div className="stats">
-        <p>Cəmi: {todos.length} | 
-           Aktiv: {todos.filter(t => !t.completed).length} | 
-           Tamamlanan: {todos.filter(t => t.completed).length}
-        </p>
-      </div>
+      <FilterButtons setFilter={setFilter} />
+
+      <TodoList
+        todos={filteredTodos}
+        toggleComplete={toggleComplete}
+        deleteTodo={deleteTodo}
+      />
+
+      <TodoStats todos={todos} />
     </div>
   );
 }
